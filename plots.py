@@ -1,7 +1,16 @@
 from typing import Union
+import os
+
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
+from sklearn.cluster import KMeans
+
+def gen_sm_coords(n_sms=1000, axis=7000, seed=42):
+	np.random.seed(seed)
+	sm_coords = np.random.uniform(0, axis, (n_sms, 2))
+	np.random.seed(None)
+
+	return sm_coords
 
 """
 Example
@@ -207,4 +216,47 @@ def plot_stacked_bars(x: list, y: list, labels: list, xlabel: str,
 
     # Salvando o gráfico no arquivo especificado
     plt.savefig(figname)
+    plt.close('all')
+
+def gen_gws_plot(points: np.ndarray, output_file='gws.eps', format='eps',
+                 area_size_m=7000, num_clusters=4, point_size=80, dpi=3000):
+    # Configurações da imagem
+    figsize_inches = (13, 8)  # Tamanho da figura definido para 13x8 polegadas
+
+    # Aplicar K-Means para criar clusters
+    kmeans = KMeans(n_clusters=num_clusters, random_state=42)
+    labels = kmeans.fit_predict(points)
+
+    # Paleta de cores acessível para daltônicos
+    color_palette = [
+        '#0072B2',  # Azul
+        '#E69F00',  # Laranja
+        '#CC79A7',  # Rosa
+        '#009E73'   # Verde
+    ]
+
+    # Criar o gráfico
+    plt.figure(figsize=figsize_inches, dpi=dpi)
+    
+    # Desenhar os clusters
+    for i in range(num_clusters):
+        cluster_points = points[labels == i]
+        plt.scatter(cluster_points[:, 0], cluster_points[:, 1], 
+                    s=point_size, color=color_palette[i % len(color_palette)], 
+                    edgecolor='black', linewidth=1.5, marker='o')  # Aumentando a largura do contorno
+
+    # Configurações do gráfico com rótulos atualizados
+    plt.xlabel("X-position (m)", fontsize=23, fontname='DejaVu Sans')
+    plt.ylabel("Y-position (m)", fontsize=23, fontname='DejaVu Sans')
+    plt.xlim(0, area_size_m)
+    plt.ylim(0, area_size_m)
+    plt.xticks(fontsize=23, fontname='DejaVu Sans')
+    plt.yticks(fontsize=23, fontname='DejaVu Sans')
+    
+    # Adicionar grid tracejado e mais fino
+    plt.grid(True, linestyle='--', linewidth=0.5)
+
+    # Salvar como EPS
+    plt.savefig(output_file, format=format, bbox_inches='tight', dpi=dpi)
+
     plt.close('all')
