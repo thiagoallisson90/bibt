@@ -246,12 +246,12 @@ def gen_gws_plot(points: np.ndarray, output_file='gws.eps', format='eps',
                     edgecolor='black', linewidth=1.5, marker='o')  # Aumentando a largura do contorno
 
     # Configurações do gráfico com rótulos atualizados
-    plt.xlabel("X-position (m)", fontsize=23, fontname='DejaVu Sans')
-    plt.ylabel("Y-position (m)", fontsize=23, fontname='DejaVu Sans')
+    plt.xlabel("X-position (m)", fontsize=25, fontname='DejaVu Sans')
+    plt.ylabel("Y-position (m)", fontsize=25, fontname='DejaVu Sans')
     plt.xlim(0, area_size_m)
     plt.ylim(0, area_size_m)
-    plt.xticks(fontsize=23, fontname='DejaVu Sans')
-    plt.yticks(fontsize=23, fontname='DejaVu Sans')
+    plt.xticks(fontsize=25, fontname='DejaVu Sans')
+    plt.yticks(fontsize=25, fontname='DejaVu Sans')
     
     # Adicionar grid tracejado e mais fino
     plt.grid(True, linestyle='--', linewidth=0.5)
